@@ -16,6 +16,9 @@ export default class NewClass extends cc.Component {
     @property([cc.Button])
     buttonNumArr: Array<cc.Button> = [];
 
+    @property([cc.Sprite])
+    spriteTouziArr: Array<cc.Sprite> = [];
+
     @property(cc.Node)
     cup: cc.Node = null;
 
@@ -25,42 +28,67 @@ export default class NewClass extends cc.Component {
 
     XiaZhu() {
         var self = this;
-        for (var i = 0; i < self.buttonNumArr.length; i++) {
-            self.buttonNumArr[i].node.on(cc.Node.EventType.TOUCH_START, function () {
-                for (var j = 0; j < self.buttonNumArr.length; j++) {
-                    self.buttonNumArr[j].enabled = false;
-                }
-                self.ShakeCup();
-            });
-        }
+        self.buttonNumArr[0].node.on(cc.Node.EventType.TOUCH_START, function () {
+            self.ShakeCup();
+        });
+        self.buttonNumArr[1].node.on(cc.Node.EventType.TOUCH_START, function () {
+            self.ShakeCup();
+        });
+        self.buttonNumArr[2].node.on(cc.Node.EventType.TOUCH_START, function () {
+            self.ShakeCup();
+        });
+        self.buttonNumArr[3].node.on(cc.Node.EventType.TOUCH_START, function () {
+            self.ShakeCup();
+        });
     }
 
     ShakeCup() {
+        this.cup.setPosition(cc.p(-1,-179));
         var rot = 10;
         var i = 0;
         var step = 2;
         var count = 0;
         var shakecount = 100;
+        this.RandomTouzi();
+
         this.schedule(function () {
             count++;
             if (i < rot) {
-                i=i+step;
+                i = i + step;
                 this.cup.rotation = i;
                 if (i >= rot) {
                     rot = -rot;
                 }
             }
             if (i > rot) {
-                i=i-step;
+                i = i - step;
                 this.cup.rotation = i;
                 if (i <= rot) {
                     rot = -rot;
                 }
             }
-            if(count >= shakecount){
+            if (count >= shakecount) {
                 this.cup.rotation = 0;
             }
-        }, 0.0002,shakecount);
+        }, 0.0002, shakecount);
+
+        this.schedule(function () {
+            var moveup = cc.moveTo(1, cc.p(this.cup.getPositionX(), this.cup.getPositionY() + 50));
+            this.cup.runAction(moveup);
+        }, 1, 1, 4);
+
+    }
+
+    RandomTouzi() {
+        var randNum = [];
+        for (var i = 0; i < 3; i++) {
+            randNum[i] = Math.ceil(cc.random0To1() * 5 + 1);
+            cc.log("" + randNum[i]);
+            var realUrl = cc.url.raw("Texture/s" + randNum[i] + ".png");
+            var texture = cc.textureCache.addImage(realUrl, function () { }, this);
+            this.spriteTouziArr[i].spriteFrame.setTexture(texture);
+        }
+
     }
 
     start() {
