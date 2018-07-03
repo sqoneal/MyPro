@@ -36,25 +36,31 @@ export default class NewClass extends cc.Component {
     }
 
     ShakeCup() {
-        var rot = 20;
+        var rot = 10;
         var i = 0;
+        var step = 2;
+        var count = 0;
+        var shakecount = 100;
         this.schedule(function () {
+            count++;
             if (i < rot) {
-                i++
+                i=i+step;
                 this.cup.rotation = i;
-                if (i == rot) {
-                    rot = -20;
+                if (i >= rot) {
+                    rot = -rot;
                 }
             }
             if (i > rot) {
-                i--;
+                i=i-step;
                 this.cup.rotation = i;
-                if (i == rot) {
-                    rot = 20;
+                if (i <= rot) {
+                    rot = -rot;
                 }
             }
-
-        }, 0.0002);
+            if(count >= shakecount){
+                this.cup.rotation = 0;
+            }
+        }, 0.0002,shakecount);
     }
 
     start() {
