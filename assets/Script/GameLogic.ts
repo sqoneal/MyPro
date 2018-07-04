@@ -43,11 +43,16 @@ export default class NewClass extends cc.Component {
     }
 
     ShakeCup() {
+        //复位骰盅位置
         this.cup.setPosition(cc.p(-1,-179));
+        //骰盅摇动的角度大小
         var rot = 10;
+        //临时控制变量
         var i = 0;
-        var step = 2;
         var count = 0;
+        //骰盅摇动的步伐--速度
+        var step = 2;
+        //骰盅来回摇动的次数
         var shakecount = 100;
         this.RandomTouzi();
 
@@ -80,6 +85,7 @@ export default class NewClass extends cc.Component {
     }
 
     RandomTouzi() {
+        //保存的三个骰子摇出的随机数值
         var randNum = [];
         for (var i = 0; i < 3; i++) {
             randNum[i] = Math.ceil(cc.random0To1() * 5 + 1);
@@ -88,7 +94,6 @@ export default class NewClass extends cc.Component {
             var texture = cc.textureCache.addImage(realUrl, function () { }, this);
             this.spriteTouziArr[i].spriteFrame.setTexture(texture);
         }
-
     }
 
     start() {
