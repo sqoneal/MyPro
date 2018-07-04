@@ -78,14 +78,14 @@ export default class NewClass extends cc.Component {
 
     UpCup() {
         this.schedule(function () {
-            var moveup = cc.moveTo(1, cc.p(this.cup.getPositionX(), this.cup.getPositionY() + 50));
+            var moveup = cc.moveBy(1, cc.p(0, 50));
             this.cup.runAction(moveup);
         }, 1, 1, 4);
     }
 
     ShakeCup() {
         //复位骰盅位置
-        this.cup.setPosition(cc.p(-1,-179));
+        this.cup.setPosition(cc.p(-1, -179));
         //骰盅摇动的角度大小
         var rot = 10;
         //临时控制变量
