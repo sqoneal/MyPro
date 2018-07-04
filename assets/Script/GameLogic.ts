@@ -22,24 +22,65 @@ export default class NewClass extends cc.Component {
     @property(cc.Node)
     cup: cc.Node = null;
 
+    @property(cc.Prefab)
+    coin: cc.Prefab = null;
+
+    //临时保存coin复制生成的预制资源，用于定位重新删除节点
+    @property([cc.Node])
+    tmpCoin: Array<cc.Node> = [];
+
     // LIFE-CYCLE CALLBACKS:
 
     // onLoad () {}
+
+    clearCoin() {
+        for (var i = 0; i < this.tmpCoin.length; i++) {
+            this.tmpCoin[i].removeFromParent(true);
+        }
+    }
+
+    newCoin(coinNum: number) {
+        this.clearCoin();
+        for (var i = 0; i < coinNum; i++) {
+            var newCoin = cc.instantiate(this.coin);
+            this.node.addChild(newCoin);
+            //临时保存coin复制生成的预制资源
+            this.tmpCoin[i] = newCoin;
+            newCoin.setPosition(-132, 214);
+            let dropdown = cc.moveTo(1 + i * 0.3, cc.p(newCoin.getPositionX() + 10, newCoin.getPositionY() - 320 + (i * 10))).easing(cc.easeCubicActionInOut());
+            newCoin.runAction(dropdown);
+        }
+    }
 
     XiaZhu() {
         var self = this;
         self.buttonNumArr[0].node.on(cc.Node.EventType.TOUCH_START, function () {
             self.ShakeCup();
+            self.newCoin(1);
+            self.UpCup();
         });
         self.buttonNumArr[1].node.on(cc.Node.EventType.TOUCH_START, function () {
             self.ShakeCup();
+            self.newCoin(2);
+            self.UpCup();
         });
         self.buttonNumArr[2].node.on(cc.Node.EventType.TOUCH_START, function () {
             self.ShakeCup();
+            self.newCoin(4);
+            self.UpCup();
         });
         self.buttonNumArr[3].node.on(cc.Node.EventType.TOUCH_START, function () {
             self.ShakeCup();
+            self.newCoin(10);
+            self.UpCup();
         });
+    }
+
+    UpCup() {
+        this.schedule(function () {
+            var moveup = cc.moveTo(1, cc.p(this.cup.getPositionX(), this.cup.getPositionY() + 50));
+            this.cup.runAction(moveup);
+        }, 1, 1, 4);
     }
 
     ShakeCup() {
@@ -77,11 +118,10 @@ export default class NewClass extends cc.Component {
             }
         }, 0.0002, shakecount);
 
-        this.schedule(function () {
+        /*this.schedule(function () {
             var moveup = cc.moveTo(1, cc.p(this.cup.getPositionX(), this.cup.getPositionY() + 50));
             this.cup.runAction(moveup);
-        }, 1, 1, 4);
-
+        }, 1, 1, 4);*/
     }
 
     RandomTouzi() {
@@ -94,6 +134,7 @@ export default class NewClass extends cc.Component {
             var texture = cc.textureCache.addImage(realUrl, function () { }, this);
             this.spriteTouziArr[i].spriteFrame.setTexture(texture);
         }
+
     }
 
     start() {
