@@ -16,11 +16,15 @@ export default class NewClass extends cc.Component {
     @property(cc.Button)
     buttonToIndex: cc.Button = null;
 
+    @property(cc.AudioClip)
+    audiogameover: cc.AudioClip = null;
+
     // LIFE-CYCLE CALLBACKS:
 
     // onLoad () {}
 
     start () {
+        cc.audioEngine.play(cc.url.raw("Texture/audio/gameover.mp3"),false,0.5);
         cc.director.preloadScene("SceneStart");
         this.buttonToIndex.node.on(cc.Node.EventType.TOUCH_START,function(){
             cc.director.loadScene("SceneStart");

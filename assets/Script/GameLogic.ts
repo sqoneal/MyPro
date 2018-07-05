@@ -76,6 +76,7 @@ export default class GameLogic extends cc.Component {
                     cc.log("买小");
                     this.labelTips.string = "请投注";
                     self.selectSide = GameLogic.SMALL;
+                    cc.audioEngine.play(cc.url.raw("Texture/audio/xuanside.mp3"),false,0.5);
                 }
                 if (locationInNode.x > 150 && locationInNode.y < 190 && locationInNode.y > 100) {
                     if (!self.cupstatus) {
@@ -85,6 +86,7 @@ export default class GameLogic extends cc.Component {
                     cc.log("买大");
                     this.labelTips.string = "请投注";
                     self.selectSide = GameLogic.BIG;
+                    cc.audioEngine.play(cc.url.raw("Texture/audio/xuanside.mp3"),false,0.5);
                 }
                 return true;
             },
@@ -110,6 +112,7 @@ export default class GameLogic extends cc.Component {
                 newCoin.setPosition(-132, 214);
                 let dropdown = cc.moveTo(1 + i * 0.3, cc.p(newCoin.getPositionX() + 10, newCoin.getPositionY() - 320 + (i * 10))).easing(cc.easeCubicActionInOut());
                 newCoin.runAction(dropdown);
+                cc.audioEngine.play(cc.url.raw("Texture/audio/newcoin.mp3"),false,0.5);
             }
         }
         if (this.selectSide == GameLogic.BIG) {
@@ -121,6 +124,7 @@ export default class GameLogic extends cc.Component {
                 newCoin.setPosition(-132, 214);
                 let dropdown = cc.moveTo(1 + i * 0.3, cc.p(newCoin.getPositionX() + 250, newCoin.getPositionY() - 320 + (i * 10))).easing(cc.easeCubicActionInOut());
                 newCoin.runAction(dropdown);
+                cc.audioEngine.play(cc.url.raw("Texture/audio/newcoin.mp3"),false,0.5);
             }
         }
     }
@@ -174,8 +178,10 @@ export default class GameLogic extends cc.Component {
             var setscore = cc.callFunc(function () {
                 self.labelScore.string = self.myScore.toString();
                 if (win) {
+                    cc.audioEngine.play(cc.url.raw("Texture/audio/win.mp3"),false,0.5);
                     self.labelTips.string = "你赢了";
                 } else {
+                    cc.audioEngine.play(cc.url.raw("Texture/audio/lose.mp3"),false,0.5);
                     self.labelTips.string = "你输了，请重来";
                 }
             }, self);
@@ -217,6 +223,8 @@ export default class GameLogic extends cc.Component {
     }
 
     ShakeCup() {
+        cc.audioEngine.play(cc.url.raw("Texture/audio/shakecup.mp3"),false,1);
+
         //复位骰盅位置
         this.cup.setPosition(cc.p(-1, -179));
         //骰盅摇动的角度大小
@@ -261,11 +269,9 @@ export default class GameLogic extends cc.Component {
         //保存的三个骰子摇出的随机数值
         for (var i = 0; i < 3; i++) {
             this.randNum[i] = Math.ceil(cc.random0To1() * 5 + 1);
-
-            var realUrl = cc.url.raw("/Texture/s" + this.randNum[i] + ".png");
-            var texture = cc.textureCache.addImage(realUrl, function () { }, this);
-            cc.log("" + texture.url);
-            this.spriteTouziArr[i].spriteFrame.setTexture(texture);
+            var realUrl = cc.url.raw("Texture/s" + this.randNum[i] + ".png");
+            //var texture = cc.textureCache.addImage(realUrl, function () { }, this);
+            this.spriteTouziArr[i].spriteFrame.setTexture(realUrl);
         }
         this.touziResult = this.randNum[0] + this.randNum[1] + this.randNum[2];
         cc.log("结果：" + this.touziResult);
