@@ -265,7 +265,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 240,
+      "width": 200,
       "height": 40
     },
     "_rotationX": 0,
@@ -293,8 +293,8 @@
     },
     "_enabled": true,
     "_useOriginalSize": false,
-    "_actualFontSize": 30,
-    "_fontSize": 30,
+    "_actualFontSize": 25,
+    "_fontSize": 25,
     "_lineHeight": 40,
     "_enableWrapText": true,
     "_N$file": null,
@@ -1949,15 +1949,6 @@
     },
     "labelTips": {
       "__id__": 6
-    },
-    "audioshakecup": {
-      "__uuid__": "fff031f0-fc53-4db3-8349-e5128d59550e"
-    },
-    "audiowin": {
-      "__uuid__": "4e1bc014-2d71-4724-8a6f-35b6e59efac0"
-    },
-    "audioxiazhucoin": {
-      "__uuid__": "f7fbe08e-1cb8-4c33-b0c0-fa26f9bc9a60"
     }
   },
   {

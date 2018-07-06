@@ -74,9 +74,9 @@ export default class GameLogic extends cc.Component {
                         return 0;
                     }
                     cc.log("买小");
-                    this.labelTips.string = "请投注";
+                    this.labelTips.string = "你已买小，请投注";
                     self.selectSide = GameLogic.SMALL;
-                    cc.audioEngine.play(cc.url.raw("Texture/audio/xuanside.mp3"),false,0.5);
+                    cc.audioEngine.play(cc.url.raw("Texture/audio/xuanside.mp3"), false, 0.5);
                 }
                 if (locationInNode.x > 150 && locationInNode.y < 190 && locationInNode.y > 100) {
                     if (!self.cupstatus) {
@@ -84,9 +84,9 @@ export default class GameLogic extends cc.Component {
                         return 0;
                     }
                     cc.log("买大");
-                    this.labelTips.string = "请投注";
+                    this.labelTips.string = "你已买大，请投注";
                     self.selectSide = GameLogic.BIG;
-                    cc.audioEngine.play(cc.url.raw("Texture/audio/xuanside.mp3"),false,0.5);
+                    cc.audioEngine.play(cc.url.raw("Texture/audio/xuanside.mp3"), false, 0.5);
                 }
                 return true;
             },
@@ -112,7 +112,7 @@ export default class GameLogic extends cc.Component {
                 newCoin.setPosition(-132, 214);
                 let dropdown = cc.moveTo(1 + i * 0.3, cc.p(newCoin.getPositionX() + 10, newCoin.getPositionY() - 320 + (i * 10))).easing(cc.easeCubicActionInOut());
                 newCoin.runAction(dropdown);
-                cc.audioEngine.play(cc.url.raw("Texture/audio/newcoin.mp3"),false,0.5);
+                cc.audioEngine.play(cc.url.raw("Texture/audio/newcoin.mp3"), false, 0.5);
             }
         }
         if (this.selectSide == GameLogic.BIG) {
@@ -124,44 +124,54 @@ export default class GameLogic extends cc.Component {
                 newCoin.setPosition(-132, 214);
                 let dropdown = cc.moveTo(1 + i * 0.3, cc.p(newCoin.getPositionX() + 250, newCoin.getPositionY() - 320 + (i * 10))).easing(cc.easeCubicActionInOut());
                 newCoin.runAction(dropdown);
-                cc.audioEngine.play(cc.url.raw("Texture/audio/newcoin.mp3"),false,0.5);
+                cc.audioEngine.play(cc.url.raw("Texture/audio/newcoin.mp3"), false, 0.5);
             }
+        }
+    }
+
+    isEnoughScore(touscore: number) {
+        if (this.myScore >= touscore) {
+            return true;
+        } else {
+            this.labelTips.string = "分数不足，重新投注";
+            this.touzhuScore = 0;
+            return false;
         }
     }
 
     XiaZhu() {
         var self = this;
         self.buttonNumArr[0].node.on(cc.Node.EventType.TOUCH_START, function () {
-            if (self.selectSide !== null && self.cupstatus) {
+            self.touzhuScore = 100;
+            if (self.selectSide !== null && self.cupstatus && self.isEnoughScore(self.touzhuScore)) {
                 self.newCoin(1);
-                self.touzhuScore = 100;
                 self.myScore -= self.touzhuScore;
                 self.labelScore.string = self.myScore.toString();
                 self.UpCup();
             }
         });
         self.buttonNumArr[1].node.on(cc.Node.EventType.TOUCH_START, function () {
-            if (self.selectSide !== null && self.cupstatus) {
+            self.touzhuScore = 200;
+            if (self.selectSide !== null && self.cupstatus && self.isEnoughScore(self.touzhuScore)) {
                 self.newCoin(2);
-                self.touzhuScore = 200;
                 self.myScore -= self.touzhuScore;
                 self.labelScore.string = self.myScore.toString();
                 self.UpCup();
             }
         });
         self.buttonNumArr[2].node.on(cc.Node.EventType.TOUCH_START, function () {
-            if (self.selectSide !== null && self.cupstatus) {
+            self.touzhuScore = 400;
+            if (self.selectSide !== null && self.cupstatus && self.isEnoughScore(self.touzhuScore)) {
                 self.newCoin(4);
-                self.touzhuScore = 400;
                 self.myScore -= self.touzhuScore;
                 self.labelScore.string = self.myScore.toString();
                 self.UpCup();
             }
         });
         self.buttonNumArr[3].node.on(cc.Node.EventType.TOUCH_START, function () {
-            if (self.selectSide !== null && self.cupstatus) {
+            self.touzhuScore = self.myScore;
+            if (self.selectSide !== null && self.cupstatus && self.isEnoughScore(self.touzhuScore)) {
                 self.newCoin(10);
-                self.touzhuScore = self.myScore;
                 self.myScore -= self.touzhuScore;
                 self.labelScore.string = self.myScore.toString();
                 self.UpCup();
@@ -178,10 +188,10 @@ export default class GameLogic extends cc.Component {
             var setscore = cc.callFunc(function () {
                 self.labelScore.string = self.myScore.toString();
                 if (win) {
-                    cc.audioEngine.play(cc.url.raw("Texture/audio/win.mp3"),false,0.5);
+                    cc.audioEngine.play(cc.url.raw("Texture/audio/win.mp3"), false, 0.5);
                     self.labelTips.string = "你赢了";
                 } else {
-                    cc.audioEngine.play(cc.url.raw("Texture/audio/lose.mp3"),false,0.5);
+                    cc.audioEngine.play(cc.url.raw("Texture/audio/lose.mp3"), false, 0.5);
                     self.labelTips.string = "你输了，请重来";
                 }
             }, self);
@@ -223,7 +233,7 @@ export default class GameLogic extends cc.Component {
     }
 
     ShakeCup() {
-        cc.audioEngine.play(cc.url.raw("Texture/audio/shakecup.mp3"),false,1);
+        cc.audioEngine.play(cc.url.raw("Texture/audio/shakecup.mp3"), false, 1);
 
         //复位骰盅位置
         this.cup.setPosition(cc.p(-1, -179));
