@@ -22,6 +22,13 @@ export default class NewClass extends cc.Component {
     // LIFE-CYCLE CALLBACKS:
 
     // onLoad () {}
+    /**
+     *
+     */
+    constructor() {
+        super();
+        
+    }
 
     start () {
         cc.audioEngine.play(cc.url.raw("Texture/audio/gameover.mp3"),false,0.5);

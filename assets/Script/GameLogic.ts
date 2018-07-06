@@ -48,7 +48,16 @@ export default class GameLogic extends cc.Component {
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {}
+    //onLoad () {}
+    
+
+    /**
+     *
+     */
+    constructor() {
+        super();
+        
+    }
 
     resetGame() {
         this.selectSide = null;

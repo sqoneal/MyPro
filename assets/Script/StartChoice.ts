@@ -20,6 +20,14 @@ export default class NewClass extends cc.Component {
 
     // onLoad () {}
 
+    /**
+     *
+     */
+    constructor() {
+        super();
+        
+    }
+
     start () {
         cc.director.preloadScene("SceneGame");
         this.btnStartSaizi.node.on(cc.Node.EventType.TOUCH_START,function(){
