@@ -66,9 +66,12 @@ export default class GameLogic extends cc.Component {
         var listener = cc.EventListener.create({
             event: 1,//1 ==>cc.EventListener.TOUCH_ONE_BY_ONE,
             onTouchBegan: (touches, event) => {
-                var target = event.getCurrentTarget();//获取事件所绑定的target
-                var locationInNode = target.convertToNodeSpace(touches.getLocation());
-                if (locationInNode.x < 150 && locationInNode.y < 190 && locationInNode.y > 100) {
+                //var target = event.getCurrentTarget();//获取事件所绑定的target
+                //var locationInNode = target.convertToNodeSpace(touches.getLocation());
+
+                let locationX = touches.getLocationX();
+                let locationY = touches.getLocationY();
+                if (locationX < 150 && locationY < 190 && locationY > 100) {
                     if (!self.cupstatus) {
                         self.labelTips.string = "请重新摇骰";
                         return 0;
@@ -78,7 +81,7 @@ export default class GameLogic extends cc.Component {
                     self.selectSide = GameLogic.SMALL;
                     cc.audioEngine.play(cc.url.raw("Texture/audio/xuanside.mp3"), false, 0.5);
                 }
-                if (locationInNode.x > 150 && locationInNode.y < 190 && locationInNode.y > 100) {
+                if (locationX > 150 && locationY < 190 && locationY > 100) {
                     if (!self.cupstatus) {
                         self.labelTips.string = "请重新摇骰";
                         return 0;
@@ -88,11 +91,40 @@ export default class GameLogic extends cc.Component {
                     self.selectSide = GameLogic.BIG;
                     cc.audioEngine.play(cc.url.raw("Texture/audio/xuanside.mp3"), false, 0.5);
                 }
+                
                 return true;
             },
         });
 
         cc.eventManager.addListener(listener, this.node);
+/*
+        this.node.on(cc.Node.EventType.TOUCH_START,(event) => {
+            //let location = event.touch.getLocationX();// cc.Vec2()
+            let locationX = event.touch.getLocationX();
+            let locationY = event.touch.getLocationY();
+
+            if (locationX < 150 && locationY < 190 && locationY > 100) {
+                if (!self.cupstatus) {
+                    self.labelTips.string = "请重新摇骰";
+                    return 0;
+                }
+                cc.log("买小");
+                this.labelTips.string = "你已买小，请投注";
+                self.selectSide = GameLogic.SMALL;
+                cc.audioEngine.play(cc.url.raw("Texture/audio/xuanside.mp3"), false, 0.5);
+            }
+            if (locationX > 150 && locationY < 190 && locationY > 100) {
+                if (!self.cupstatus) {
+                    self.labelTips.string = "请重新摇骰";
+                    return 0;
+                }
+                cc.log("买大");
+                this.labelTips.string = "你已买大，请投注";
+                self.selectSide = GameLogic.BIG;
+                cc.audioEngine.play(cc.url.raw("Texture/audio/xuanside.mp3"), false, 0.5);
+            }
+            console.log(locationX+"---"+locationY);
+        },this);*/
     }
 
     clearCoin() {
