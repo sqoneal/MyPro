@@ -43,6 +43,9 @@ export default class GameLogic extends cc.Component {
     @property(cc.Label)
     labelScore: cc.Label = null;
 
+    @property(cc.Node)
+    coinpos: cc.Node = null;
+
     @property(cc.Label)
     labelTips: cc.Label = null;
 
@@ -132,6 +135,8 @@ export default class GameLogic extends cc.Component {
                 cc.audioEngine.play(cc.url.raw("resources/xuanside.mp3"), false, 0.5);
             }
         }, this);
+
+        cc.log("selectside end");
     }
 
     clearCoin() {
@@ -143,15 +148,16 @@ export default class GameLogic extends cc.Component {
     }
 
     newCoin(coinNum: number) {
+        cc.log("newcoin start");
         this.clearCoin();
         if (this.selectSide == GameLogic.SMALL) {
             for (var i = 0; i < coinNum; i++) {
                 var newCoin = cc.instantiate(this.coin);
-                this.node.addChild(newCoin);
+                this.node.addChild(newCoin,10);
                 //临时保存coin复制生成的预制资源
                 this.tmpCoin[i] = newCoin;
-                newCoin.setPosition(-132, 214);
-                let dropdown = cc.moveTo(1 + i * 0.3, cc.p(newCoin.getPositionX() + 10, newCoin.getPositionY() - 320 + (i * 10))).easing(cc.easeCubicActionInOut());
+                newCoin.setPosition(this.coinpos.x,this.coinpos.y);
+                let dropdown = cc.moveTo(1 + i * 0.3, cc.p(-100, newCoin.y - 320 + (i * 10))).easing(cc.easeCubicActionInOut());
                 newCoin.runAction(dropdown);
                 cc.audioEngine.play(cc.url.raw("resources/newcoin.mp3"), false, 0.5);
             }
@@ -159,15 +165,16 @@ export default class GameLogic extends cc.Component {
         if (this.selectSide == GameLogic.BIG) {
             for (var i = 0; i < coinNum; i++) {
                 var newCoin = cc.instantiate(this.coin);
-                this.node.addChild(newCoin);
+                this.node.addChild(newCoin,10);
                 //临时保存coin复制生成的预制资源
                 this.tmpCoin[i] = newCoin;
-                newCoin.setPosition(-132, 214);
-                let dropdown = cc.moveTo(1 + i * 0.3, cc.p(newCoin.getPositionX() + 250, newCoin.getPositionY() - 320 + (i * 10))).easing(cc.easeCubicActionInOut());
+                newCoin.setPosition(this.coinpos.x,this.coinpos.y);
+                let dropdown = cc.moveTo(1 + i * 0.3, cc.p(100, newCoin.y - 320 + (i * 10))).easing(cc.easeCubicActionInOut());
                 newCoin.runAction(dropdown);
                 cc.audioEngine.play(cc.url.raw("resources/newcoin.mp3"), false, 0.5);
             }
         }
+        cc.log("newcoin end");
     }
 
     isEnoughScore(touscore: number) {
@@ -218,9 +225,12 @@ export default class GameLogic extends cc.Component {
                 self.UpCup();
             }
         });
+
+        cc.log("xiazhu end");
     }
 
     UpCup() {
+        cc.log("upcup start");
         this.cupstatus = false;
         let win = false;
         var self = this;
@@ -265,13 +275,16 @@ export default class GameLogic extends cc.Component {
         }
 
         this.selectSide = "";//把选择大小状态重置
+
+        cc.log("upcup end");
     }
 
     ShakeCup() {
+        cc.log("shake start");
         cc.audioEngine.play(cc.url.raw("resources/shakecup.mp3"), false, 1);
 
         //复位骰盅位置
-        this.cup.setPosition(cc.p(-1, -179));
+        this.cup.setPosition(cc.p(-1, -151));
         //骰盅摇动的角度大小
         var rot = 10;
         //临时控制变量
@@ -303,26 +316,27 @@ export default class GameLogic extends cc.Component {
                 this.cup.rotation = 0;
             }
         }, 0.0002, shakecount);
-
-        /*this.schedule(function () {
-            var moveup = cc.moveTo(1, cc.p(this.cup.getPositionX(), this.cup.getPositionY() + 50));
-            this.cup.runAction(moveup);
-        }, 1, 1, 4);*/
+        cc.log("shake end");
+        
     }
 
     RandomTouzi() {
+        cc.log("RandomTouzi start");
         //保存的三个骰子摇出的随机数值
         for (var i = 0; i < 3; i++) {
             this.randNum[i] = Math.ceil(cc.random0To1() * 5 + 1);
             var realUrl = cc.url.raw("resources/s" + this.randNum[i] + ".png");
-            //var texture = cc.textureCache.addImage(realUrl, function () { }, this);
-            this.spriteTouziArr[i].spriteFrame.setTexture(realUrl);
+            var texture = cc.textureCache.addImage(realUrl, function () { }, this.spriteTouziArr[i]);
+            this.spriteTouziArr[i].spriteFrame.setTexture(texture);
         }
         this.touziResult = this.randNum[0] + this.randNum[1] + this.randNum[2];
         cc.log("结果：" + this.touziResult);
+
+        cc.log("RandomTouzi end");
     }
 
     start() {
+        cc.log("start");
         this.resetGame();
         this.setSelectSide();
         this.XiaZhu();
