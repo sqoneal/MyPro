@@ -16,7 +16,7 @@ export default class GameLogic extends cc.Component {
     public static BIG: String = "BIG";
     public static SMALL: String = "SMALL";
     private touziResult: number = 0;
-    private randNum: number[] = [0,0,0];
+    private randNum: number[] = [0, 0, 0];
     private myScore: number = 1000;
     private touzhuScore: number = 0;
     private cupstatus: boolean = true;//true为杯子没起来，false为杯子已经起来
@@ -153,10 +153,10 @@ export default class GameLogic extends cc.Component {
         if (this.selectSide == GameLogic.SMALL) {
             for (var i = 0; i < coinNum; i++) {
                 var newCoin = cc.instantiate(this.coin);
-                this.node.addChild(newCoin,10);
+                this.node.addChild(newCoin, 10);
                 //临时保存coin复制生成的预制资源
                 this.tmpCoin[i] = newCoin;
-                newCoin.setPosition(this.coinpos.x,this.coinpos.y);
+                newCoin.setPosition(this.coinpos.x, this.coinpos.y);
                 let dropdown = cc.moveTo(1 + i * 0.3, cc.p(-100, newCoin.y - 320 + (i * 10))).easing(cc.easeCubicActionInOut());
                 newCoin.runAction(dropdown);
                 cc.audioEngine.play(cc.url.raw("resources/newcoin.mp3"), false, 0.5);
@@ -165,10 +165,10 @@ export default class GameLogic extends cc.Component {
         if (this.selectSide == GameLogic.BIG) {
             for (var i = 0; i < coinNum; i++) {
                 var newCoin = cc.instantiate(this.coin);
-                this.node.addChild(newCoin,10);
+                this.node.addChild(newCoin, 10);
                 //临时保存coin复制生成的预制资源
                 this.tmpCoin[i] = newCoin;
-                newCoin.setPosition(this.coinpos.x,this.coinpos.y);
+                newCoin.setPosition(this.coinpos.x, this.coinpos.y);
                 let dropdown = cc.moveTo(1 + i * 0.3, cc.p(100, newCoin.y - 320 + (i * 10))).easing(cc.easeCubicActionInOut());
                 newCoin.runAction(dropdown);
                 cc.audioEngine.play(cc.url.raw("resources/newcoin.mp3"), false, 0.5);
@@ -317,17 +317,25 @@ export default class GameLogic extends cc.Component {
             }
         }, 0.0002, shakecount);
         cc.log("shake end");
-        
+
     }
 
     RandomTouzi() {
-        cc.log("RandomTouzi start");
+        //var frame0 = new cc.SpriteFrame(texture, new cc.Rect(2, -142, 77, 67));
+        //var frame1 = new cc.SpriteFrame(texture, new cc.Rect(-7, -174, 77, 67));
+        //var frame2 = new cc.SpriteFrame(texture, new cc.Rect(23, -167, 77, 67));
+        cc.log("RandomTouzi start" + this.spriteTouziArr[0].srcBlendFactor + "::" + this.spriteTouziArr[0].dstBlendFactor);
         //保存的三个骰子摇出的随机数值
         for (var i = 0; i < 3; i++) {
             this.randNum[i] = Math.ceil(cc.random0To1() * 5 + 1);
             var realUrl = cc.url.raw("resources/s" + this.randNum[i] + ".png");
-            var texture = cc.textureCache.addImage(realUrl, function () { }, this.spriteTouziArr[i]);
-            this.spriteTouziArr[i].spriteFrame.setTexture(texture);
+            var texture = cc.textureCache.addImage(realUrl, function () { }, this);
+
+            var frame0 = new cc.SpriteFrame(texture, new cc.Rect(0, 0, 77, 67), false, cc.p(0, 0), new cc.Size(77, 67));
+            this.spriteTouziArr[i].spriteFrame = frame0;
+
+            //this.spriteTouziArr[i].spriteFrame.setTexture(texture);
+
         }
         this.touziResult = this.randNum[0] + this.randNum[1] + this.randNum[2];
         cc.log("结果：" + this.touziResult);
@@ -344,7 +352,7 @@ export default class GameLogic extends cc.Component {
         this.labelTips.string = "请选择大小";
 
         var self = this;
-        this.buttonReset.node.on(cc.Node.EventType.TOUCH_START, function () { self.resetGame();});
+        this.buttonReset.node.on(cc.Node.EventType.TOUCH_START, function () { self.resetGame(); });
     }
 
     // update (dt) {}
